@@ -1,7 +1,11 @@
 import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  output: 'export',
+  // IMPORTANT: Replace `your-repo-name` below with the name of your GitHub repository.
+  // For example, if your repository is at https://github.com/your-username/my-awesome-app,
+  // then you should set basePath to '/my-awesome-app'.
+  basePath: '/your-repo-name',
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -9,6 +13,8 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
+    // Image optimization is not available for static exports.
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
