@@ -1,7 +1,7 @@
 "use client";
 
 import type { Level, QuizQuestion } from "@/lib/data";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useProgress } from "@/hooks/use-progress";
 import { Button } from "@/components/ui/button";
@@ -23,13 +23,12 @@ import {
   HelpCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/use-toast";
 
 function LessonTab({ levelData }: { levelData: Level }) {
   const [playing, setPlaying] = useState<string | null>(null);
   const [isSupported, setIsSupported] = useState(false);
   const [thaiVoice, setThaiVoice] = useState<SpeechSynthesisVoice | null>(null);
-  const { toast } = useToast();
 
   useEffect(() => {
     if (typeof window !== "undefined" && window.speechSynthesis) {
@@ -141,7 +140,6 @@ function LessonTab({ levelData }: { levelData: Level }) {
 function QuizTab({ levelData }: { levelData: Level }) {
   const router = useRouter();
   const { markAsCompleted } = useProgress();
-  const { toast } = useToast();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
