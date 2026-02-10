@@ -3,7 +3,7 @@ import type {NextConfig} from 'next';
 const nextConfig: NextConfig = {
   output: 'export',
   // IMPORTANT: Replace `your-repo-name` below with the name of your GitHub repository.
-  // For example, if your repository is at https://github.com/your-username/my-awesome-app,
+  // For example, if your repository is at https://github.com/username/my-awesome-app,
   // then you should set basePath to '/my-awesome-app'.
   basePath: '/your-repo-name',
   typescript: {
