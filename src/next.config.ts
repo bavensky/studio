@@ -3,7 +3,7 @@ import type {NextConfig} from 'next';
 const nextConfig: NextConfig = {
   output: 'export',
   // This should be the name of your GitHub repository.
-  basePath: '/studio',
+  basePath: '/learn-thai',
   typescript: {
     ignoreBuildErrors: true,
   },
