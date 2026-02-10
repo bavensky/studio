@@ -2,11 +2,10 @@ import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
   output: 'export',
-  // IMPORTANT: You MUST replace `<your-repo-name>` below with the name of your
-  // GitHub repository.
-  // For example, if your repository URL is https://github.com/my-user/my-cool-app,
-  // then you should set basePath to '/my-cool-app'.
-  basePath: '/studio',
+  // IMPORTANT: Replace `your-repo-name` below with the name of your GitHub repository.
+  // For example, if your repository is at https://github.com/username/my-awesome-app,
+  // then you should set basePath to '/my-awesome-app'.
+  basePath: '/your-repo-name',
   typescript: {
     ignoreBuildErrors: true,
   },
