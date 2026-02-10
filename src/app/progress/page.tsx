@@ -49,7 +49,7 @@ export default function ProgressPage() {
       </header>
 
       <div className="grid gap-8 md:grid-cols-3">
-        <Card className="md:col-span-2">
+        <Card className="md:col-span-2 border-t-4 border-primary">
           <CardHeader>
             <CardTitle className="font-headline text-2xl">Completed Levels</CardTitle>
           </CardHeader>
@@ -79,7 +79,7 @@ export default function ProgressPage() {
         </Card>
 
         <div className="space-y-8">
-          <Card className="text-center bg-card">
+          <Card className="text-center bg-card border-t-4 border-primary">
             <CardHeader>
               <CardTitle className="font-headline text-2xl">Overall Progress</CardTitle>
             </CardHeader>
@@ -107,7 +107,7 @@ export default function ProgressPage() {
             </CardContent>
           </Card>
           
-          <Card>
+          <Card className="border-t-4 border-border">
              <CardHeader>
                 <CardTitle className="font-headline text-xl">Settings</CardTitle>
              </CardHeader>

@@ -55,7 +55,7 @@ export default function Home() {
             return (
               <Card
                 key={level.level}
-                className={`flex flex-col transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${!unlocked ? "bg-muted/50" : "bg-card"}`}
+                className={`flex flex-col transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border-t-4 ${!unlocked ? "bg-muted/50 border-muted" : "bg-card border-primary"}`}
               >
                 <CardHeader>
                   <div className="flex justify-between items-start">
