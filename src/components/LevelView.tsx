@@ -1,7 +1,7 @@
 "use client";
 
 import type { Level, QuizQuestion } from "@/lib/data";
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useProgress } from "@/hooks/use-progress";
 import { Button } from "@/components/ui/button";
@@ -27,6 +27,7 @@ import { useToast } from "@/hooks/use-toast";
 
 function LessonTab({ levelData }: { levelData: Level }) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const { toast } = useToast();
 
   // You would replace this with actual audio file paths
   const playAudio = () => {
@@ -81,7 +82,21 @@ function QuizTab({ levelData }: { levelData: Level }) {
   const [score, setScore] = useState(0);
   const [quizFinished, setQuizFinished] = useState(false);
   
-  const shuffledQuiz = useMemo(() => levelData.quiz.sort(() => Math.random() - 0.5), [levelData.quiz]);
+  const [shuffledQuiz, setShuffledQuiz] = useState<QuizQuestion[]>([]);
+
+  useEffect(() => {
+    // Shuffle on the client side only after hydration to prevent mismatch
+    setShuffledQuiz([...levelData.quiz].sort(() => Math.random() - 0.5));
+  }, [levelData.quiz]);
+
+  if (shuffledQuiz.length === 0) {
+    return (
+      <div className="flex justify-center items-center p-8">
+        <p>Loading quiz...</p>
+      </div>
+    );
+  }
+  
   const currentQuestion: QuizQuestion = shuffledQuiz[currentQuestionIndex];
   
   const handleAnswer = (option: string) => {
