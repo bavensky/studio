@@ -26,16 +26,78 @@ import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 
 function LessonTab({ levelData }: { levelData: Level }) {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [playing, setPlaying] = useState<string | null>(null);
+  const [isSupported, setIsSupported] = useState(false);
+  const [thaiVoice, setThaiVoice] = useState<SpeechSynthesisVoice | null>(null);
   const { toast } = useToast();
 
-  // You would replace this with actual audio file paths
-  const playAudio = () => {
-    toast({
-      title: "Audio Pronunciation",
-      description:
-        "Audio playback is a demo feature. In a real app, this would play the Thai pronunciation.",
-    });
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.speechSynthesis) {
+      setIsSupported(true);
+
+      const getVoices = () => {
+        const voices = window.speechSynthesis.getVoices();
+        if (voices.length > 0) {
+          const voice = voices.find((v) => v.lang === "th-TH") || null;
+          setThaiVoice(voice);
+        }
+      };
+
+      getVoices();
+      // Voices can load asynchronously.
+      window.speechSynthesis.onvoiceschanged = getVoices;
+
+      return () => {
+        window.speechSynthesis.onvoiceschanged = null;
+        window.speechSynthesis.cancel();
+      };
+    }
+  }, []);
+  
+  const playAudio = (text: string) => {
+    if (!isSupported) {
+      toast({
+        variant: "destructive",
+        title: "Audio Not Supported",
+        description: "Your browser does not support speech synthesis.",
+      });
+      return;
+    }
+
+    if (!thaiVoice) {
+      toast({
+        variant: "destructive",
+        title: "Thai Voice Not Available",
+        description:
+          "A Thai voice is not installed on your system or browser.",
+      });
+      return;
+    }
+    
+    // If speaking the current phrase, stop it.
+    if (window.speechSynthesis.speaking && playing === text) {
+      window.speechSynthesis.cancel();
+      setPlaying(null);
+      return;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.voice = thaiVoice;
+    utterance.lang = "th-TH";
+    utterance.rate = 0.8; // Speak a bit slower for clarity
+    utterance.onstart = () => setPlaying(text);
+    utterance.onend = () => setPlaying(null);
+    utterance.onerror = (event) => {
+      toast({
+        variant: "destructive",
+        title: "Audio Error",
+        description: `An error occurred: ${event.error}`,
+      });
+      setPlaying(null);
+    };
+    
+    window.speechSynthesis.cancel(); // Stop any previous utterance
+    window.speechSynthesis.speak(utterance);
   };
   
   return (
@@ -60,8 +122,12 @@ function LessonTab({ levelData }: { levelData: Level }) {
               <p className="text-lg text-foreground/90">{lesson.english}</p>
             </CardContent>
             <CardFooter>
-              <Button variant="outline" size="icon" onClick={playAudio}>
-                <Volume2 className="h-5 w-5" />
+              <Button variant="outline" size="icon" onClick={() => playAudio(lesson.thai)}>
+                {playing === lesson.thai ? (
+                  <Volume2 className="h-5 w-5 text-primary animate-pulse" />
+                ) : (
+                  <Volume2 className="h-5 w-5" />
+                )}
                 <span className="sr-only">Play pronunciation</span>
               </Button>
             </CardFooter>
@@ -86,7 +152,8 @@ function QuizTab({ levelData }: { levelData: Level }) {
 
   useEffect(() => {
     // Shuffle on the client side only after hydration to prevent mismatch
-    setShuffledQuiz([...levelData.quiz].sort(() => Math.random() - 0.5));
+    const newShuffledQuiz = [...levelData.quiz].sort(() => Math.random() - 0.5);
+    setShuffledQuiz(newShuffledQuiz);
   }, [levelData.quiz]);
 
   if (shuffledQuiz.length === 0) {
