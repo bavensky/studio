@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   // IMPORTANT: Replace `your-repo-name` below with the name of your GitHub repository.
   // For example, if your repository is at https://github.com/username/my-awesome-app,
   // then you should set basePath to '/my-awesome-app'.
-  basePath: '/your-repo-name',
+  basePath: '/bavensky',
   typescript: {
     ignoreBuildErrors: true,
   },
